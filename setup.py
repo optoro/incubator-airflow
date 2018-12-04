@@ -36,13 +36,13 @@ PY3 = sys.version_info[0] == 3
 
 # See LEGAL-362
 def verify_gpl_dependency():
-    # The Read the Docs build environment [1] does a pip install of Airflow which cannot
-    # be overridden with custom environment variables, so we detect the READTHEDOCS env
-    # var they provide to set the env var that avoids the GPL dependency on install when
-    # building the docs site.
-    # [1]: http://docs.readthedocs.io/en/latest/builds.html#build-environment
-    if os.getenv("READTHEDOCS") == "True":
-        os.environ["SLUGIFY_USES_TEXT_UNIDECODE"] = "yes"
+    """
+    Deploying Airflow with mc-hammer doesn't allow the setting
+    of arbitrary env vars before Airflow is installed. By making
+    SLUGIFY_USES_TEXT_UNIDECODE the default, we're hoping to get
+    around this.
+    """
+    os.environ["SLUGIFY_USES_TEXT_UNIDECODE"] = "yes"
 
     if (not os.getenv("AIRFLOW_GPL_UNIDECODE")
             and not os.getenv("SLUGIFY_USES_TEXT_UNIDECODE") == "yes"):
